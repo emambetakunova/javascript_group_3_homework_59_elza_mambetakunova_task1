@@ -1,68 +1,73 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import AddMovie from "../../components/AddMovie/AddMovie";
+import WatchList from "../../components/WatchList/WatchList";
 
 class MovieBuilder extends Component {
 
     state = {
-        posts: []
+        listName: 'Add new movie',
+        newListName: '',
+        allMovieList: [],
+        showItems: true
 
     };
 
-    constructor(props) {
-        super(props);
-        console.log('[MovieBuilder] constructor');
-        console.log('[MovieBuilder] State exists:', this.state.posts.length > 0);
+    addMovie = () => {
+        if (this.state.listName === "") {
+            alert('Please, add your item!')
+        } else {
+            const newMovie = this.state.listName;
+            const allMovieList = [...this.state.allMovieList];
+            allMovieList.push(newMovie);
+            this.setState({allMovieList: allMovieList, listName: ''});
+        }
     };
 
-    componentDidMount() {
-        console.log('[MovieBuilder] DidMount');
-
-        fetch('http://jsonplaceholder.typicode.com/posts?_limit=4').then(response => {
-            if(response.ok) {
-                return response.json();
-            }
-
-            throw new Error('Something');
-        }).then(posts => {
-            const updatedPosts = posts.map(post => {
-                return {
-                    ...post,
-                    author: 'John'
-                }
-            });
-
-            this.setState({posts: updatedPosts})
-        }).catch(error => {
-            console.log(error);
-        })
-    }
-
-    componentDidUpdate() {
-        console.log('[MovieBuilder] DidUpdate');
-    }
-
-    togglePostForm = () => {
-        this.setState(prevState => {
-            console.log('[MovieBuilder] Toggling form');
-            return {postsFormShown: !prevState.postsFormShown}
-        })
+    changeHandlerName = event => {
+        this.setState({listName: event.target.value});
     };
 
+    changeHandlerNewName = (event, id) => {
+        const allMovieList = this.state.allMovieList;
+        allMovieList[id] = event.target.value;
+        this.setState({allMovieList});
+    };
+
+    focusHandler = () => {
+        this.setState({listName: ''})
+    };
+
+    removeItem = id => {
+        const allMovie = [...this.state.allMovieList];
+        allMovie.splice(id, 1);
+
+        this.setState({allMovieList: allMovie});
+    };
 
     render() {
-        console.log('[MovieBuilder] render');
+        let items = null;
 
-        let postsForm = null;
-
-        if(this.state.postsFormShown) {
-            postsForm = <section className="NewPost">New post form</section>
+        if (this.state.showItems) {
+            items = this.state.allMovieList.map((item, id) => (
+                <WatchList
+                    key={id}
+                    text={item}
+                    onChange={(event) => this.changeHandlerNewName(event, id)}
+                    remove={() => this.removeItem(id)}
+                />
+            ));
         }
-
         return (
-            <Fragment>
-                <AddMovie/>
-            </Fragment>
-        );
+            <div className="Wrapper">
+                <AddMovie
+                    changeHandlerName={this.changeHandlerName}
+                    listName={this.state.listName}
+                    onClick={() => this.addMovie()}
+                    onFocus={this.focusHandler}
+                />
+                {items}
+            </div>
+        )
     }
 }
 

@@ -3,27 +3,15 @@ import './AddMovie.css'
 
 class AddMovie extends Component {
 
-    componentDidMount() {
-        console.log('[AddMovie] DidMount');
-    }
-
-    componentDidUpdate() {
-        console.log('[AddMovie] DidUpdate');
-    }
-
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     console.log('[Post] ShouldUpdate');
-    //
-    //     return nextProps.title !== this.props.title ||
-    //         nextProps.author !== this.props.author
-    // }
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.listName !== this.props.listName
+    };
 
     render() {
-        console.log('[AddMovie] render');
         return (
-            <div className="addTaskForm">
-                <input type="text" value={this.props.value} onChange={this.props.changeHandler} />
-                <button className="addBtn" onClick={this.props.onClick}>Add</button>
+            <div className="AddMovieForm">
+                <input className="AddMovie" type="text" onFocus={this.props.onFocus} value={this.props.listName} onChange={this.props.changeHandlerName} />
+                <button className="AddBtn" onClick={this.props.onClick}>Add</button>
             </div>
         );
     }

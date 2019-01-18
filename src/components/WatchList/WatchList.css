@@ -1,0 +1,19 @@
+.List {
+    margin-left: 46%;
+    transform: translateX(-50%);
+
+}
+.List input {
+    border: 1px solid #ffbb42;
+    padding: 5px 28px;
+    margin-bottom: 20px;
+}
+
+.RemoveBtn {
+    border: 2px solid #ffbb42;
+    border-radius: 3px;
+    box-shadow: 0px 2px 5px 0px rgba(255, 187, 66, 0.75);
+    background: #ffbb42;
+    color: #000000;
+    font-weight: bold;
+}
